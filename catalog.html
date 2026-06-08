@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Каталог — SUNLINE</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">SUNLINE</a>
+    <nav aria-label="Главная навигация">
+      <a href="catalog.html">Коллекция</a>
+      <a href="looks.html">Образы</a>
+      <a href="delivery.html">Доставка</a>
+    </nav>
+    <a class="header-action" href="cart.html">Корзина <span data-cart-count>0</span></a>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <p class="eyebrow">Каталог</p>
+      <h1>Летняя коллекция</h1>
+      <p>Три спокойных вещи для жары, отпуска и городского ритма. Каждую можно добавить в корзину или открыть подробнее.</p>
+    </section>
+
+    <section class="section">
+      <div class="catalog-grid">
+        <article class="catalog-card">
+          <a href="product-linen.html"><img src="assets/linen-set.jpg" alt="Льняной комплект"></a>
+          <div>
+            <a href="product-linen.html"><h2>Льняной комплект</h2></a>
+            <p>Белая рубашка и свободные шорты для жаркого дня.</p>
+          </div>
+          <div class="card-row">
+            <strong>7 900 ₽</strong>
+            <button class="secondary-button" type="button" data-add-to-cart="linen">В корзину</button>
+          </div>
+        </article>
+        <article class="catalog-card">
+          <a href="product-dress.html"><img src="assets/cotton-dress.jpg" alt="Полосатое платье"></a>
+          <div>
+            <a href="product-dress.html"><h2>Полосатое платье</h2></a>
+            <p>Легкий силуэт для прогулок, дороги и отдыха у воды.</p>
+          </div>
+          <div class="card-row">
+            <strong>6 400 ₽</strong>
+            <button class="secondary-button" type="button" data-add-to-cart="dress">В корзину</button>
+          </div>
+        </article>
+        <article class="catalog-card">
+          <a href="product-shirt.html"><img src="assets/resort-shirt.jpg" alt="Resort-рубашка"></a>
+          <div>
+            <a href="product-shirt.html"><h2>Resort-рубашка</h2></a>
+            <p>Воздушная ткань и курортный крой для теплого вечера.</p>
+          </div>
+          <div class="card-row">
+            <strong>4 800 ₽</strong>
+            <button class="secondary-button" type="button" data-add-to-cart="shirt">В корзину</button>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="brand" href="index.html">SUNLINE</a>
+    <div>
+      <a href="catalog.html">Коллекция</a>
+      <a href="looks.html">Образы</a>
+      <a href="delivery.html">Доставка</a>
+      <a href="cart.html">Корзина</a>
+    </div>
+  </footer>
+</body>
+</html>

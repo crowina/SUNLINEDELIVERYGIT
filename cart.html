@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Корзина — SUNLINE</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="index.html">SUNLINE</a>
+    <nav aria-label="Главная навигация">
+      <a href="catalog.html">Коллекция</a>
+      <a href="looks.html">Образы</a>
+      <a href="delivery.html">Доставка</a>
+    </nav>
+    <a class="header-action" href="cart.html">Корзина <span data-cart-count>0</span></a>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <p class="eyebrow">Корзина</p>
+      <h1>Ваш заказ</h1>
+      <p>Здесь сохраняются вещи, которые вы добавили на страницах товаров или в каталоге.</p>
+    </section>
+
+    <section class="section cart-layout">
+      <div data-cart-items class="cart-items"></div>
+      <aside class="cart-summary">
+        <h2>Итого</h2>
+        <strong data-cart-total>0 ₽</strong>
+        <button class="primary-button" type="button" data-checkout>Оформить заказ</button>
+        <button class="text-button" type="button" data-clear-cart>Очистить корзину</button>
+        <p data-cart-message></p>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="brand" href="index.html">SUNLINE</a>
+    <div><a href="catalog.html">Коллекция</a><a href="looks.html">Образы</a><a href="delivery.html">Доставка</a></div>
+  </footer>
+</body>
+</html>
