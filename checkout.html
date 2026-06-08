@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Оформление заказа — SUNLINE</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="script.js" defer></script>
+  <style>
+    /* ── Checkout-specific styles ── */
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: start;
+    }
+    @media (max-width: 768px) {
+      .checkout-grid { grid-template-columns: 1fr; gap: 2rem; }
+    }
+
+    /* Order summary */
+    .order-summary-block h2 {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 1.5rem;
+      color: var(--color-text, #1a1a1a);
+    }
+    .order-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 0.75rem 0;
+      border-bottom: 1px solid var(--color-border, #e8e4df);
+      font-size: 0.95rem;
+    }
+    .order-line:last-of-type { border-bottom: none; }
+    .order-line-name { color: var(--color-text, #1a1a1a); }
+    .order-line-qty { color: var(--color-muted, #888); font-size: 0.85rem; margin-left: 0.5rem; }
+    .order-line-price { font-weight: 500; }
+    .order-total-row {
+      display: flex;
+      justify-content: space-between;
+      padding-top: 1.25rem;
+      margin-top: 0.5rem;
+      border-top: 2px solid var(--color-text, #1a1a1a);
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    .empty-order-msg {
+      color: var(--color-muted, #888);
+      font-size: 0.95rem;
+      padding: 1rem 0;
+    }
+
+    /* Form */
+    .checkout-form-block h2 {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: 1.5rem;
+      color: var(--color-text, #1a1a1a);
+    }
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      margin-bottom: 1.1rem;
+    }
+    .form-group label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--color-muted, #888);
+    }
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem 0;
+      border: none;
+      border-bottom: 1.5px solid var(--color-border, #d8d3cc);
+      background: transparent;
+      font-family: inherit;
+      font-size: 0.95rem;
+      color: var(--color-text, #1a1a1a);
+      outline: none;
+      transition: border-color 0.2s;
+      appearance: none;
+      -webkit-appearance: none;
+      border-radius: 0;
+    }
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-bottom-color: var(--color-text, #1a1a1a);
+    }
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+    .form-group select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 4px center;
+      padding-right: 1.5rem;
+    }
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+    @media (max-width: 480px) { .form-row { grid-template-columns: 1fr; } }
+
+    .checkout-submit {
+      margin-top: 1.5rem;
+      width: 100%;
+    }
+    .checkout-note {
+      margin-top: 1rem;
+      font-size: 0.8rem;
+      color: var(--color-muted, #888);
+      line-height: 1.6;
+    }
+
+    /* Success state */
+    .checkout-success {
+      display: none;
+      text-align: center;
+      padding: 3rem 1rem;
+    }
+    .checkout-success .success-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .checkout-success h2 {
+      margin-bottom: 0.75rem;
+    }
+    .checkout-success p {
+      color: var(--color-muted, #888);
+      margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <header class="site-header">
+    <a class="brand" href="index.html">SUNLINE</a>
+    <nav aria-label="Главная навигация">
+      <a href="catalog.html">Коллекция</a>
+      <a href="looks.html">Образы</a>
+      <a href="delivery.html">Доставка</a>
+    </nav>
+    <a class="header-action" href="cart.html">Корзина <span data-cart-count>0</span></a>
+  </header>
+
+  <main>
+    <section class="page-hero">
+      <p class="eyebrow">Оформление</p>
+      <h1>Ваш заказ</h1>
+      <p>Укажите данные для доставки — менеджер свяжется для подтверждения.</p>
+    </section>
+
+    <section class="section">
+      <!-- Success message (shown after submit) -->
+      <div class="checkout-success" id="checkout-success">
+        <div class="success-icon">✓</div>
+        <h2>Заказ принят</h2>
+        <p>Мы получили ваш заказ и свяжемся с вами для подтверждения.</p>
+        <a href="catalog.html" class="primary-button">Вернуться в каталог</a>
+      </div>
+
+      <!-- Checkout layout -->
+      <div class="checkout-grid" id="checkout-layout">
+
+        <!-- Left: order summary -->
+        <div class="order-summary-block">
+          <h2>Состав заказа</h2>
+          <div id="order-summary-lines">
+            <p class="empty-order-msg">Корзина пуста. <a href="catalog.html">Перейти в каталог</a></p>
+          </div>
+          <div class="order-total-row" id="order-total-row" style="display:none">
+            <span>Итого</span>
+            <span id="order-total-amount">0 ₽</span>
+          </div>
+        </div>
+
+        <!-- Right: form -->
+        <div class="checkout-form-block">
+          <h2>Данные доставки</h2>
+
+          <form id="checkout-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+            <!-- Hidden field: serialized cart -->
+            <input type="hidden" name="order_details" id="hidden-order">
+            <input type="hidden" name="_subject" value="Новый заказ — SUNLINE">
+            <!-- Honeypot anti-spam -->
+            <input type="text" name="_gotcha" style="display:none">
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="checkout-name">Имя</label>
+                <input type="text" id="checkout-name" name="name" placeholder="Ваше имя" required autocomplete="given-name">
+              </div>
+              <div class="form-group">
+                <label for="checkout-phone">Телефон</label>
+                <input type="tel" id="checkout-phone" name="phone" placeholder="+7 (___) ___-__-__" required autocomplete="tel">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="checkout-address">Адрес доставки</label>
+              <input type="text" id="checkout-address" name="address" placeholder="Город, улица, дом, квартира" required autocomplete="street-address">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label for="checkout-time">Удобное время</label>
+                <select id="checkout-time" name="delivery_time">
+                  <option value="Утро 9:00–13:00">Утро (9:00–13:00)</option>
+                  <option value="День 13:00–18:00">День (13:00–18:00)</option>
+                  <option value="Вечер 18:00–21:00">Вечер (18:00–21:00)</option>
+                  <option value="Любое">Любое удобное</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="checkout-size">Нужна помощь с размером?</label>
+                <select id="checkout-size" name="size_help">
+                  <option value="Нет">Нет, уже выбрал(а)</option>
+                  <option value="Да">Да, уточните у менеджера</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="checkout-comment">Комментарий</label>
+              <textarea id="checkout-comment" name="comment" placeholder="Особые пожелания, код домофона и т.д."></textarea>
+            </div>
+
+            <button type="submit" class="primary-button checkout-submit" id="submit-btn">Подтвердить заказ</button>
+            <p class="checkout-note">Доставка по городу 1–2 дня. Менеджер позвонит для подтверждения времени.</p>
+          </form>
+        </div>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <a class="brand" href="index.html">SUNLINE</a>
+    <div>
+      <a href="catalog.html">Коллекция</a>
+      <a href="looks.html">Образы</a>
+      <a href="delivery.html">Доставка</a>
+      <a href="cart.html">Корзина</a>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      // ── Read cart from localStorage ──
+      const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+      const summaryEl = document.getElementById('order-summary-lines');
+      const totalRow = document.getElementById('order-total-row');
+      const totalAmountEl = document.getElementById('order-total-amount');
+      const hiddenOrder = document.getElementById('hidden-order');
+      const form = document.getElementById('checkout-form');
+      const submitBtn = document.getElementById('submit-btn');
+      const successEl = document.getElementById('checkout-success');
+      const layoutEl = document.getElementById('checkout-layout');
+
+      if (cart.length === 0) {
+        // Empty cart — disable form
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Корзина пуста';
+      } else {
+        // Build summary lines
+        const lines = [];
+        let total = 0;
+        summaryEl.innerHTML = '';
+
+        cart.forEach(item => {
+          const price = item.price * (item.qty || 1);
+          total += price;
+          lines.push(`${item.name} x${item.qty || 1} — ${price.toLocaleString('ru-RU')} ₽`);
+
+          const div = document.createElement('div');
+          div.className = 'order-line';
+          div.innerHTML = `
+            <span class="order-line-name">${item.name}<span class="order-line-qty">× ${item.qty || 1}</span></span>
+            <span class="order-line-price">${price.toLocaleString('ru-RU')} ₽</span>
+          `;
+          summaryEl.appendChild(div);
+        });
+
+        totalAmountEl.textContent = total.toLocaleString('ru-RU') + ' ₽';
+        totalRow.style.display = 'flex';
+        hiddenOrder.value = lines.join('\n') + `\nИТОГО: ${total.toLocaleString('ru-RU')} ₽`;
+      }
+
+      // ── Handle form submission ──
+      form.addEventListener('submit', async function (e) {
+        e.preventDefault();
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Отправляем...';
+
+        const data = new FormData(form);
+
+        try {
+          const res = await fetch(form.action, {
+            method: 'POST',
+            body: data,
+            headers: { Accept: 'application/json' }
+          });
+
+          if (res.ok) {
+            // Clear cart
+            localStorage.removeItem('cart');
+            // Show success
+            layoutEl.style.display = 'none';
+            successEl.style.display = 'block';
+            // Update cart counter
+            const counter = document.querySelector('[data-cart-count]');
+            if (counter) counter.textContent = '0';
+          } else {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Подтвердить заказ';
+            alert('Не удалось отправить заказ. Пожалуйста, попробуйте ещё раз или свяжитесь с нами напрямую.');
+          }
+        } catch {
+          submitBtn.disabled = false;
+          submitBtn.textContent = 'Подтвердить заказ';
+          alert('Ошибка соединения. Проверьте интернет и попробуйте снова.');
+        }
+      });
+    })();
+  </script>
+
+</body>
+</html>
